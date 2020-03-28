@@ -78,13 +78,25 @@ kbdleds_configure (XfcePanelPlugin *plugin,
   xfce_panel_plugin_block_menu (plugin);
 
   /* create the dialog */
+  
+  /* changed gtk3  
   dialog = xfce_titled_dialog_new_with_buttons (_("Kbdleds Plugin"),
                                                 GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (plugin))),
                                                 GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
                                                 GTK_STOCK_HELP, GTK_RESPONSE_HELP,
                                                 GTK_STOCK_CLOSE, GTK_RESPONSE_OK,
                                                 NULL);
-
+  */
+  
+  dialog = xfce_titled_dialog_new_with_buttons (_("Kbdleds Plugin"),
+                                                GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (plugin))),
+                                                GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                GTK_STOCK_HELP, GTK_RESPONSE_HELP,
+                                                GTK_STOCK_CLOSE, GTK_RESPONSE_OK,
+                                                NULL);
+  
+  
+  
   /* center dialog on the screen */
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
 

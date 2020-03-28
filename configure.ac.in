@@ -1,53 +1,54 @@
 dnl $Id$
 dnl
-dnl xfce4-kbdleds-plugin - A keyboard LEDs plugin for the Xfce panel
+dnl xfce4-kdbleds-plugin - A plugin for the Xfce panel to show caps-, numeric-, and scroll-lock indics
 dnl
-dnl 2011 OCo <oco@newmail.ru>
+dnl 2019 John Doo <john@foo.org>
 dnl
 
 dnl ***************************
 dnl *** Version information ***
 dnl ***************************
-m4_define([kbdleds_version_major], [0])
-m4_define([kbdleds_version_minor], [0])
-m4_define([kbdleds_version_micro], [6])
-m4_define([kbdleds_version_nano],  []) dnl leave this empty to have no nano version
-m4_define([kbdleds_version_build], [@REVISION@])
-m4_define([kbdleds_version_tag], [])
-m4_define([kbdleds_version], [kbdleds_version_major().kbdleds_version_minor().kbdleds_version_micro()ifelse(kbdleds_version_nano(), [], [], [.kbdleds_version_nano()])ifelse(kbdleds_version_tag(), [git], [kbdleds_version_tag()-kbdleds_version_build()], [kbdleds_version_tag()])])
+m4_define([kdbleds_version_major], [0])
+m4_define([kdbleds_version_minor], [0])
+m4_define([kdbleds_version_micro], [3])
+m4_define([kdbleds_version_nano],  []) dnl leave this empty to have no nano version
+m4_define([kdbleds_version_build], [@REVISION@])
+m4_define([kdbleds_version_tag], [git])
+m4_define([kdbleds_version], [kdbleds_version_major().kdbleds_version_minor().kdbleds_version_micro()ifelse(kdbleds_version_nano(), [], [], [.kdbleds_version_nano()])ifelse(kdbleds_version_tag(), [git], [kdbleds_version_tag()-kdbleds_version_build()], [kdbleds_version_tag()])])
+m4_define([kdbleds_default_debug], [ifelse(kdbleds_version_tag(), [git], [yes], [minimum])])
 
+AC_CONFIG_MACRO_DIR([m4])
 dnl ***************************
 dnl *** Initialize autoconf ***
 dnl ***************************
-AC_COPYRIGHT([Copyright (c) 2011
+AC_COPYRIGHT([Copyright (C) 2019
         The Xfce development team. All rights reserved.])
-AC_INIT([xfce4-kbdleds], [kbdleds_version], [http://bugzilla.xfce.org/], [xfce4-kbdleds-plugin])
+AC_INIT([xfce4-kdbleds-plugin], [kdbleds_version], [https://bugzilla.xfce.org/], [xfce4-kdbleds-plugin])
 AC_PREREQ([2.50])
 AC_REVISION([xfce4_panel_version_build])
 
 dnl ***************************
 dnl *** Initialize automake ***
 dnl ***************************
-AM_INIT_AUTOMAKE([1.8 no-dist-gzip dist-bzip2 tar-ustar])
-AM_CONFIG_HEADER([config.h])
+AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-bzip2 tar-ustar])
+AC_CONFIG_HEADER([config.h])
 AM_MAINTAINER_MODE()
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-dnl *******************************
-dnl *** Check for UNIX variants ***
-dnl *******************************
-AC_AIX()
-AC_ISC_POSIX()
+dnl **************************
+dnl *** Initialize libtool ***
+dnl **************************
+LT_PREREQ([2.2.6])
+LT_INIT([disable-static])
 
 dnl ********************************
 dnl *** Check for basic programs ***
 dnl ********************************
 AC_PROG_CC()
-AM_PROG_CC_C_O()
+AC_PROG_CC_C_O()
 AC_PROG_LD()
 AC_PROG_INSTALL()
-AC_PROG_INTLTOOL()
-AC_PROG_LIBTOOL()
+IT_PROG_INTLTOOL([0.35.0])
 
 dnl **********************************
 dnl *** Check for standard headers ***
@@ -61,7 +62,7 @@ AC_CHECK_FUNCS([bind_textdomain_codeset])
 dnl ******************************
 dnl *** Check for i18n support ***
 dnl ******************************
-XDT_I18N([ru uk])
+XDT_I18N([@LINGUAS@])
 
 dnl *******************************
 dnl *** Check for X11 installed ***
@@ -71,20 +72,13 @@ XDT_CHECK_LIBX11_REQUIRE()
 dnl ***********************************
 dnl *** Check for required packages ***
 dnl ***********************************
-dnl XDT_CHECK_PACKAGE([GTK], [gtk+-2.0], [2.6.0])
-dnl XDT_CHECK_PACKAGE([LIBXFCE4UTIL], [libxfce4util-1.0], [4.3.90])
-dnl XDT_CHECK_PACKAGE([LIBXFCEGUI4], [libxfcegui4-1.0], [4.3.90])
-dnl XDT_CHECK_PACKAGE([LIBXFCE4PANEL], [libxfce4panel-1.0], [4.3.90])
-
-XDT_CHECK_PACKAGE([GTK], [gtk+-2.0], [2.20.0])
-XDT_CHECK_PACKAGE([LIBXFCE4UI], [libxfce4ui-1], [4.6.0])
-XDT_CHECK_PACKAGE([LIBXFCE4UTIL], [libxfce4util-1.0], [4.6.0])
-XDT_CHECK_PACKAGE([LIBXFCE4PANEL], [libxfce4panel-1.0], [4.6.0])
+XDT_CHECK_PACKAGE([LIBXFCE4UI], [libxfce4ui-2], [4.12.0])
+XDT_CHECK_PACKAGE([LIBXFCE4PANEL], [libxfce4panel-2.0], [4.12.0])
 
 dnl ***********************************
 dnl *** Check for debugging support ***
 dnl ***********************************
-XDT_FEATURE_DEBUG()
+XDT_FEATURE_DEBUG([kdbleds_default_debug])
 
 dnl *********************************
 dnl *** Substitute platform flags ***

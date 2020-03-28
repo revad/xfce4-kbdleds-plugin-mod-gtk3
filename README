@@ -3,10 +3,13 @@ What is it?
 
 This is a keyboard leds plugin (based on sample plugin) for the Xfce panel.
 
+This version was cloned from
+https://github.com/xfce-mirror/xfce4-kbdleds-plugin
+and modified for gtk 3 to run on Debian 10.
+Dave Royal 28-03-2020 
 
 Installation
 ============
 
-The file 'INSTALL' contains generic installation instructions. 
-But you must use ./configure --prefix=/usr
-!!!
+The file 'INSTALL' contains installation instructions. 
+

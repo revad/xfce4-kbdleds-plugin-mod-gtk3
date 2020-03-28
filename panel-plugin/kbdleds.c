@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 #include <libxfce4util/libxfce4util.h>
 #include <libxfce4panel/xfce-panel-plugin.h>
-#include <libxfce4panel/xfce-hvbox.h>
 //#include <syslog.h>
 
 #include "kbdleds.h"
@@ -46,7 +45,7 @@ static void
 kbdleds_construct (XfcePanelPlugin *plugin);
 
 /* register the plugin */
-XFCE_PANEL_PLUGIN_REGISTER_EXTERNAL (kbdleds_construct);
+XFCE_PANEL_PLUGIN_REGISTER (kbdleds_construct);
 
 void
 kbdleds_save (XfcePanelPlugin *plugin,
@@ -149,20 +148,16 @@ kbdleds_new (XfcePanelPlugin *plugin)
   kbdleds->ebox = gtk_event_box_new ();
   gtk_widget_show (kbdleds->ebox);
 
-  kbdleds->hvbox = xfce_hvbox_new (orientation, FALSE, 2);
+  kbdleds->hvbox = gtk_box_new (orientation, 2);
   gtk_widget_show (kbdleds->hvbox);
-  gtk_container_add (GTK_CONTAINER (kbdleds->ebox), kbdleds->hvbox);
+  gtk_container_add (GTK_CONTAINER (kbdleds->ebox), kbdleds->hvbox);  
 
   /* some kbdleds widgets */
   kbdleds->label = gtk_label_new (short_lock_names);
   gtk_widget_set_has_tooltip(kbdleds->label,TRUE);
   gtk_widget_show (kbdleds->label);
   gtk_box_pack_start (GTK_BOX (kbdleds->hvbox), kbdleds->label, FALSE, FALSE, 0);
-/*
-  label = gtk_label_new (_("Plugin"));
-  gtk_widget_show (label);
-  gtk_box_pack_start (GTK_BOX (kbdleds->hvbox), label, FALSE, FALSE, 0);
-*/
+
   return kbdleds;
 }
 
@@ -179,7 +174,7 @@ kbdleds_free (XfcePanelPlugin *plugin,
 
   /* destroy the panel widgets */
   gtk_widget_destroy (kbdleds->hvbox);
-
+  
   /* cleanup the settings */
   if (G_LIKELY (kbdleds->setting1 != NULL))
     g_free (kbdleds->setting1);
@@ -194,7 +189,7 @@ kbdleds_orientation_changed (XfcePanelPlugin *plugin,
                             kbdledsPlugin    *kbdleds)
 {
   /* change the orienation of the box */
-  xfce_hvbox_set_orientation (XFCE_HVBOX (kbdleds->hvbox), orientation);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(kbdleds->hvbox), orientation);
 }
 
 static gboolean
